@@ -256,4 +256,4 @@ def register_premium_menu(bot: Client):
             # Baaki tools: tumhare next parts me jo functions honge unse connect kar denge
             await client.send_message(chat_id, f"✅ Tool selected: `{cmd}` (wiring next)")
             return
-
+  await cq.answer()
