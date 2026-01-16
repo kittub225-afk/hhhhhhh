@@ -1,4 +1,3 @@
-# 🔧 Standard Library
 import os
 import re
 import sys
@@ -27,7 +26,6 @@ import m3u8
 import cloudscraper
 import yt_dlp
 import tgcrypto
-from logs import logging
 from bs4 import BeautifulSoup
 from pytube import YouTube
 from Crypto.Cipher import AES
@@ -63,15 +61,21 @@ from html_handler import html_handler
 from itsgolu import *
 
 from clean import register_clean_handler
-from logs import logging
 from utils import progress_bar
 from vars import *
 
-# Pyromod fix
+# ✅ Logger (keep only one import)
+from logs import logging
+
+# ✅ Pyromod listen fix (for client.listen / bot.listen)
 import pyromod.listen
 pyromod.listen.Client.listen = pyromod.listen.listen
 
 from db import db
+
+# ✅ Plugins loader (Premium Menu panels/buttons)
+from plugins.register_all import register_all_plugins
+
 
 auto_flags = {}
 auto_clicked = False
@@ -83,7 +87,7 @@ userbot = None
 timeout_duration = 300  # 5 minutes
 
 
-# Initialize bot with random session
+# Initialize bot with session
 bot = Client(
     "ugx",
     api_id=API_ID,
@@ -93,6 +97,9 @@ bot = Client(
     sleep_threshold=60,
     in_memory=True
 )
+
+# ✅ Register plugins (adds Premium Settings/Commands panels + buttons)
+register_all_plugins(bot)
 
 # Register command handlers
 register_clean_handler(bot)
