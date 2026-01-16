@@ -306,10 +306,11 @@ async def restart_handler(_, m):
 @bot.on_message(filters.command("start") & (filters.private | filters.channel))
 async def start(bot: Client, m: Message):
     try:
+        # ✅ Channel
         if m.chat.type == "channel":
             if not db.is_channel_authorized(m.chat.id, bot.me.username):
                 return
-                
+
             await m.reply_text(
                 "**✨ Bot is active in this channel**\n\n"
                 "**Available Commands:**\n"
@@ -317,51 +318,48 @@ async def start(bot: Client, m: Message):
                 "• /plan - View channel subscription\n\n"
                 "Send these commands in the channel to use them."
             )
-        else:
-            # Check user authorization
-            is_authorized = db.is_user_authorized(m.from_user.id, bot.me.username)
-            is_admin = db.is_admin(m.from_user.id)
-            
-            if not is_authorized:
-                await m.reply_photo(
-                    photo=photologo,
-                    caption="**Mʏ Nᴀᴍᴇ [DRM Wɪᴢᴀʀᴅ 🦋](https://t.me/ITsGOLU_OWNER_BOT)\n\nYᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴀᴄᴄᴇꜱꜱ ᴛᴏ ᴜꜱᴇ ᴛʜɪꜱ ʙᴏᴛ\nCᴏɴᴛᴀᴄᴛ [𝐈𝐓'𝐬𝐆𝐎𝐋𝐔.™®](https://t.me/ITsGOLU_OWNER_BOT) ғᴏʀ ᴀᴄᴄᴇꜱꜱ**",
-                    reply_markup=InlineKeyboardMarkup([
-    [
-        InlineKeyboardButton("𝐈𝐓'𝐬𝐆𝐎𝐋𝐔.™®", url="https://t.me/ITsGOLU_OWNER_BOT")
-    ],
-    [
-        InlineKeyboardButton("ғᴇᴀᴛᴜʀᴇꜱ 🪔", callback_data="features"),
-        InlineKeyboardButton("ᴅᴇᴛᴀɪʟꜱ 🦋", callback_data="details")
-    ]
-])
-                )
-                return
-                
-            commands_list = (
-                "**>  /drm - ꜱᴛᴀʀᴛ ᴜᴘʟᴏᴀᴅɪɴɢ ᴄᴘ/ᴄᴡ ᴄᴏᴜʀꜱᴇꜱ**\n"
-                "**>  /plan - ᴠɪᴇᴡ ʏᴏᴜʀ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ ᴅᴇᴛᴀɪʟꜱ**\n"
-            )
-            
-            if is_admin:
-                commands_list += (
-                    "\n**👑 Admin Commands**\n"
-                    "• /users - List all users\n"
-                )
-            
+            return
+
+        # ✅ Private (else)
+        is_authorized = db.is_user_authorized(m.from_user.id, bot.me.username)
+        is_admin = db.is_admin(m.from_user.id)
+
+        # ❌ Not authorized
+        if not is_authorized:
             await m.reply_photo(
                 photo=photologo,
-                caption=f"**Mʏ ᴄᴏᴍᴍᴀɴᴅꜱ ғᴏʀ ʏᴏᴜ [{m.from_user.first_name} ](tg://settings)**\n\n{commands_list}",
+                caption="**Mʏ Nᴀᴍᴇ [DRM Wɪᴢᴀʀᴅ 🦋](https://t.me/ITsGOLU_OWNER_BOT)\n\n"
+                        "Yᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴀᴄᴄᴇꜱꜱ ᴛᴏ ᴜꜱᴇ ᴛʜɪꜱ ʙᴏᴛ\n"
+                        "Cᴏɴᴛᴀᴄᴛ [𝐈𝐓'𝐬𝐆𝐎𝐋𝐔.™®](https://t.me/ITsGOLU_OWNER_BOT) ғᴏʀ ᴀᴄᴄᴇꜱꜱ**",
                 reply_markup=InlineKeyboardMarkup([
-    [
-        InlineKeyboardButton("𝐈𝐓'𝐬𝐆𝐎𝐋𝐔.™®", url="https://t.me/ITsGOLU_OWNER_BOT")
-    ],
-    [
-        InlineKeyboardButton("ғᴇᴀᴛᴜʀᴇꜱ 🪔", callback_data="features"),
-        InlineKeyboardButton("ᴅᴇᴛᴀɪʟꜱ 🦋", callback_data="details")
-    ]])
-)
-            
+                    [InlineKeyboardButton("𝐈𝐓'𝐬𝐆𝐎𝐋𝐔.™®", url="https://t.me/ITsGOLU_OWNER_BOT")],
+                    [
+                        InlineKeyboardButton("ғᴇᴀᴛᴜʀᴇꜱ 🪔", callback_data="features"),
+                        InlineKeyboardButton("ᴅᴇᴛᴀɪʟꜱ 🦋", callback_data="details")
+                    ]
+                ])
+            )
+            return  # ✅ very important
+
+        # ✅ Authorized user
+        commands_list = (
+            "**>  /drm - ꜱᴛᴀʀᴛ ᴜᴘʟᴏᴀᴅɪɴɢ ᴄᴘ/ᴄᴡ ᴄᴏᴜʀꜱᴇꜱ**\n"
+            "**>  /plan - ᴠɪᴇᴡ ʏᴏᴜʀ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ ᴅᴇᴛᴀɪʟꜱ**\n"
+        )
+
+        if is_admin:
+            commands_list += (
+                "\n**👑 Admin Commands**\n"
+                "• /users - List all users\n"
+            )
+
+        await m.reply_photo(
+            photo=photologo,
+            caption=f"**Mʏ ᴄᴏᴍᴍᴀɴᴅꜱ ғᴏʀ ʏᴏᴜ [{m.from_user.first_name}](tg://settings)**\n\n"
+                    f"{commands_list}\n\n🧰 Menu niche hai 👇",
+            reply_markup=MAIN_MENU_KB
+        )
+
     except Exception as e:
         print(f"Error in start command: {str(e)}")
 
