@@ -1221,5 +1221,8 @@ async def back_to_start_callback(client, callback_query: CallbackQuery):
         ])
     )
 
-print("Bot Started...")
-bot.run()
+if __name__ == "__main__":
+    print("🤖 Bot Started...")
+    bot.start()
+    idle()
+    bot.stop()
