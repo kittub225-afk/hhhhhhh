@@ -73,9 +73,8 @@ pyromod.listen.Client.listen = pyromod.listen.listen
 
 from db import db
 
-# ✅ Plugins loader (Premium Menu panels/buttons)
 from plugins.register_all import register_all_plugins
-
+from plugins.premium_menu import MAIN_MENU_KB 
 
 auto_flags = {}
 auto_clicked = False
